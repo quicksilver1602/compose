@@ -90,7 +90,8 @@ class ProjectTest(DockerClientTestCase):
         project.up()
 
         containers = project.containers(['web'])
-        assert [c.name for c in containers] == ['composetest_web_1']
+        assert len(containers) == 1
+        assert containers[0].name.startswith('composetest_web_')
 
     def test_containers_with_extra_service(self):
         web = self.create_service('web')
@@ -1944,7 +1945,7 @@ class ProjectTest(DockerClientTestCase):
 
         containers = project.containers(stopped=True)
         assert len(containers) == 1
-        assert containers[0].name == 'underscoretest_svc1_1'
+        assert containers[0].name.startswith('underscoretest_svc1_')
         assert containers[0].project == '_underscoretest'
 
         full_vol_name = 'underscoretest_foo'
@@ -1965,7 +1966,7 @@ class ProjectTest(DockerClientTestCase):
 
         containers = project2.containers(stopped=True)
         assert len(containers) == 1
-        assert containers[0].name == 'dashtest_svc1_1'
+        assert containers[0].name.startswith('dashtest_svc1_')
         assert containers[0].project == '-dashtest'
 
         full_vol_name = 'dashtest_foo'
